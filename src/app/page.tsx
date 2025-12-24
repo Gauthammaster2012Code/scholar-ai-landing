@@ -1,11 +1,13 @@
 'use client'
 
 import Image from 'next/image'
-import { useSearchParams } from 'next/navigation'
-import { Suspense } from 'react'
+import { useState } from 'react'
+import WaitlistForm from './components/WaitlistForm'
 import ThankYou from './components/ThankYou'
 
 export default function Home() {
+  const [submitted, setSubmitted] = useState(false)
+
   return (
     <>
       <a href="#main" className="skip-link">Skip to main content</a>
@@ -14,9 +16,7 @@ export default function Home() {
           <Hero />
           <HowItWorks />
           <ValueProps />
-          <Suspense fallback={<WaitlistForm />}>
-            <Waitlist />
-          </Suspense>
+          <Waitlist submitted={submitted} onSuccess={() => setSubmitted(true)} />
           <Footer />
         </main>
       </div>
@@ -27,19 +27,16 @@ export default function Home() {
 function Hero() {
   return (
     <section className="min-h-screen flex items-center justify-center section relative overflow-hidden">
-      {/* Background elements */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-[120px] pulse-glow" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-[120px] pulse-glow" />
       
       <div className="max-w-5xl mx-auto text-center relative z-10">
-        {/* Logo */}
         <div className="fade-up mb-8">
           <div className="inline-flex p-4 rounded-3xl glass glow float">
             <Image src="/scholar-ai-graduation-cap.svg" alt="Scholar AI logo" width={64} height={64} priority />
           </div>
         </div>
 
-        {/* Badge */}
         <div className="fade-up delay-100 mb-6">
           <span className="badge">
             <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
@@ -47,20 +44,17 @@ function Hero() {
           </span>
         </div>
 
-        {/* Headline */}
         <h1 className="fade-up delay-200 text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6">
           <span className="gradient-text">Study Smarter</span>
           <br />
           <span className="gradient-text-primary">Not Harder</span>
         </h1>
 
-        {/* Subhead */}
         <p className="fade-up delay-300 text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-10 leading-relaxed">
           Scholar AI will be your AI-powered study companion, helping you understand 
           any subject with clear, step-by-step explanations.
         </p>
 
-        {/* CTAs */}
         <div className="fade-up delay-400 flex flex-col sm:flex-row gap-4 justify-center">
           <a href="#waitlist" className="btn-primary">
             Join the Waitlist
@@ -71,7 +65,6 @@ function Hero() {
           <a href="#how-it-works" className="btn-secondary">Learn More</a>
         </div>
       </div>
-
     </section>
   )
 }
@@ -94,7 +87,7 @@ function HowItWorks() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {steps.map((step, i) => (
+          {steps.map((step) => (
             <article key={step.num} className="glass glass-hover p-8 group">
               <div className="flex items-center gap-4 mb-6">
                 <span className="text-4xl font-bold text-white/10 group-hover:text-primary/30 transition-colors">{step.num}</span>
@@ -155,51 +148,13 @@ function ValueProps() {
   )
 }
 
-function Waitlist() {
-  const searchParams = useSearchParams()
-  const success = searchParams.get('success') === 'true'
-
+function Waitlist({ submitted, onSuccess }: { submitted: boolean; onSuccess: () => void }) {
   return (
     <section id="waitlist" className="section" aria-labelledby="waitlist-heading">
       <div className="max-w-2xl mx-auto">
-        {success ? <ThankYou /> : <WaitlistForm />}
+        {submitted ? <ThankYou /> : <WaitlistForm onSuccess={onSuccess} />}
       </div>
     </section>
-  )
-}
-
-function WaitlistForm() {
-  return (
-    <div className="glass p-10 md:p-12 glow relative overflow-hidden">
-      <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/20 rounded-full blur-[80px]" />
-      
-      <div className="relative z-10 text-center">
-        <h2 id="waitlist-heading" className="text-3xl md:text-4xl font-bold gradient-text mb-4">
-          Be First in Line
-        </h2>
-        <p className="text-white/50 mb-8">
-          Join the waitlist and get notified when Scholar AI launches.
-        </p>
-
-        <form action="https://formspree.io/f/mdanvwao" method="POST" className="space-y-4">
-          <input type="text" name="_gotcha" className="hidden" tabIndex={-1} autoComplete="off" />
-          <div className="flex flex-col sm:flex-row gap-3">
-            <label htmlFor="email" className="sr-only">Email address</label>
-            <input
-              id="email"
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              required
-              className="input flex-1"
-            />
-            <button type="submit" className="btn-primary">
-              Join Waitlist
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
   )
 }
 

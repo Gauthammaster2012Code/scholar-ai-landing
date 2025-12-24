@@ -1,3 +1,5 @@
+'use client'
+
 export default function ThankYou() {
   return (
     <div className="glass p-10 md:p-12 glow text-center" role="status" aria-live="polite">
@@ -7,16 +9,10 @@ export default function ThankYou() {
         </svg>
       </div>
       <h2 className="text-2xl font-bold mb-2">You&apos;re on the list!</h2>
-      <p className="text-white/50 mb-6">
+      <p className="text-white/50">
         Thanks for joining the Scholar AI waitlist.<br />
-        We&apos;ll email you when the project is ready.
+        We&apos;ll notify you when the project is ready.
       </p>
-      <button
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="btn-secondary text-sm"
-      >
-        Back to top
-      </button>
     </div>
   )
 }
