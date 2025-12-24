@@ -1,6 +1,6 @@
 # Scholar AI Landing Page
 
-A pre-MVP landing page for Scholar AI v3.0 — an upcoming AI-powered study assistant for students.
+A pre-MVP landing page for Scholar AI v3.0 - an upcoming AI-powered study assistant for students.
 
 ## Purpose
 
